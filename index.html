@@ -32,47 +32,57 @@
 	</div>
 	
 	<script>
-	    $(document).ready(function(){
-    $("button").click(function(){
-        var t = $('#temp').val(); // Celsius
-        var u = $('#unit').val();
-        
-        if (!validateTemperature(t)) {
-            return;
-        }
-        
-        var t1;
-        var u1;
-        
-        if (u == "F") {
-            t1 = t * (9/5) + 32;
-            u1 = "Fahrenheit";
-        } else if (u == "K") {
-            t1 = t + 273.15;
-            u1 = "Kelvin";
-        } else if (u == "R") {
-            t1 = t * (4/5);
-            u1 = "Réaumur";
-        }
-        
-        alert("Temperature is " + t1 + " in " + u1);
-    });
-});
-
-function validateTemperature(temp) {
-    if (isNaN(temp)) {
-        alert("Please verify whether the temperature value is correct!!!");
-        return false;
-    }
-    
-    temp = parseFloat(temp);
-    if (!(temp >= -100 && temp <= 100)) {
-        alert("Temperature entered (in Celsius) must be between -100 and 100 C");
-        return false;
-    }
-    
-    return true;
-}
+		$(document).ready(function(){
+			$("button").click(function(){
+				var t = $('#temp').val(); // Celsius
+				var u = $('#unit').val();
+				
+				if (!validateTemperatureInput(t)) {
+					return;
+				}
+				
+				var result = convertTemperature(t, u);
+				if (result) {
+					$("#result").text("Temperature is " + result.value + " in " + result.unit);
+				}
+			});
+		});
+		
+		function validateTemperatureInput(t) {
+			if (isNaN(t)) {
+				alert("Please verify whether the temperature value is correct!!!");
+				return false;
+			}
+			
+			if (!(t >= -100 && t <= 100)) {
+				alert("Temperature entered (in Celsius) must be between -100 and 100 C");
+				return false;
+			}
+			
+			return true;
+		}
+		
+		function convertTemperature(t, u) {
+			var t1;
+			var u1;
+			
+			if (u == "F") {
+				t1 = t * (9/5) + 32;
+				u1 = "Fahrenheit";
+			} else if (u == "K") {
+				t1 = t * (4/5);
+				u1 = "Réaumur";
+			} else if (u == "R") {
+				t1 = parseFloat(t) + 273.15;
+				u1 = "Kelvin";
+			} else {
+				alert("Invalid unit selected!");
+				return null;
+			}
+			
+			return { value: t1, unit: u1 };
+		}
 	</script>
+	
 </body>
 </html>
